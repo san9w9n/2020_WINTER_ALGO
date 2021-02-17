@@ -11,6 +11,7 @@ if n==2:
     sys.exit(0)
 if n==3:
     print(max(arr[0]+arr[1],arr[0]+arr[2],arr[1]+arr[2]))
+    sys.exit(0)
 dp=[arr[0],arr[0]+arr[1],max(arr[0]+arr[1],arr[0]+arr[2],arr[1]+arr[2])] + [0]*(n-3)
 
 for i in range(3,n):
