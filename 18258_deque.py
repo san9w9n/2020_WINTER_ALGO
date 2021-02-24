@@ -3,7 +3,8 @@ from collections import deque
 n=int(sys.stdin.readline())
 que=deque()
 #deque 를 하면 시간이 빠르다!
-
+#int() 형변환을 사용해서 append 해주면 메모리가 적게들지만 시간이 좀 걸리고
+#그냥 문자열 그대로 넣어주면 메모리가 많이들지만 시간이 빠르다.
 def Empty():
     if len(que)==0: return True
     return False
