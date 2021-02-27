@@ -1,19 +1,13 @@
 import sys
-
-n=int(sys.stdin.readline())
-stk=list(map(int,sys.stdin.readline().split()))
-tmp=[]
-ans=[-1]
-tmp.append(stk.pop())
-while stk:
-    if tmp[-1]>stk[-1]:
-        ans.append(tmp[-1])
-        tmp.append(stk.pop())
-    else:
-        tmp.pop()
-    if not tmp:
-        ans.append(-1)
-        tmp.append(stk.pop())
-for x in range(len(ans)-1,0,-1):
-    print(ans[x],end=" ")
-print(ans[0])
+n,m=map(int,sys.stdin.readline().split())
+k=n-m
+def div(n,d):
+    cnt=0
+    while True:
+        cnt+=n//d
+        n//=d
+        if n==0: break
+    return cnt
+f=div(n,5)-div(m,5)-div(k,5)
+t=div(n,2)-div(m,2)-div(k,2)
+print(min(f,t))
