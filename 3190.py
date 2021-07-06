@@ -1,63 +1,83 @@
 import sys
 from collections import deque
-n=int(sys.stdin.readline())
-game=[[0 for x in range(n)] for y in range(n) ]
+input = sys.stdin.readline
 
-k=int(sys.stdin.readline())
-for _ in range(k):
-    x,y=map(int,sys.stdin.readline().split())
-    game[x-1][y-1]=1
+# 기본 0, 사과는 1, 뱀은 8
+N = int(input())
+field = [[0 for _ in range(N)] for _ in range(N)]
+field[0][0] = 8
 
-l=int(sys.stdin.readline())
-move=[0 for x in range(10005)]
-for _ in range(l):
-    m=list(map(str,sys.stdin.readline().split()))
-    m[0]=int(m[0])
-    move[m[0]]=m[1]
+K = int(input())
+for _ in range(K):
+    I, J = map(int, input().split())
+    field[I-1][J-1] = 1
 
-r,c=0,0
-game[0][0]=2
-d=1
-di=[(-1,0),(0,1),(1,0),(0,-1)] #북,동,남,서
-game_over=0
-snake=deque([(r,c)])
-def die():
-    global r,c,d
-    if r+di[d][0]>=n or c+di[d][1]>=n or r+di[d][0]<0 or c+di[d][1]<0:
-        return True
-    elif game[r+di[d][0]][c+di[d][1]]==2:
-        return True
-    return False
+L = int(input())
+direct_info = [0 for _ in range(10001)]
+for _ in range(L):
+    X, C = map(str, input().split())
+    direct_info[int(X)] = C
 
-def go():
-    global r,c,d,game_over
-    if die():
-        game_over=1
-        return
-    elif not die() and game[r+di[d][0]][c+di[d][1]]==1:
-        r+=di[d][0]
-        c+=di[d][1]
-        snake.append((r,c))
-        game[r][c]=2
-    elif not die() and game[r+di[d][0]][c+di[d][1]]==0:
-        game[snake[0][0]][snake[0][1]]=0
-        snake.popleft()
-        r+=di[d][0]
-        c+=di[d][1]
-        snake.append((r,c))
-        game[r][c]=2
+def move_check(x,y, dx,dy):
+    global field
+    if(field[x+dx][y+dy] == 1):
+        return 1
+    elif(field[x+dx][y+dy] == 8):
+        return -1
+    else: return 0
+
+def rotate(d,sec):
+    global direct_info
+    if direct_info[sec] == 0: return d
+    elif direct_info[sec] == 'D':
+        if d==0: return 3
+        else: return d-1
+    else:
+        if d==3: return 0
+        else: return d+1
     
-time=0
-game[r][c]==2
-while True:
-    go()
-    if game_over==1: break
-    time+=1
-    if move[time]=="L": d=(d+3)%4
-    elif move[time]=="D": d=(d+1)%4
+def print_field():
+    global field
+    for r in field:
+        print(*r)
 
-print(time+1)
+def move():
+    global field, N
+    sec = 0
+    d = 0
+    x = 0
+    y = 0
+    # 동, 북, 서, 남으로 이동
+    dx = [0,-1,0,1]
+    dy = [1,0,-1,0]
+    info = deque([(0,0)])
+
+    while True:
+        sec+=1
+        r = x+dx[d]
+        c = y+dy[d]
+
+        if 0<=r<N and 0<=c<N:
+            check = move_check(x,y,dx[d],dy[d])
+            if check == 1:
+                x = r
+                y = c
+                field[x][y] = 8
+                info.append((x,y))
+            elif check == 0:
+                p,q = info.popleft()
+                field[p][q] = 0
+                x = r
+                y = c
+                field[x][y] = 8
+                info.append((x,y))
+
+            else: break
+        else: break
+
+        d = rotate(d,sec)
+        
+    return sec
 
 
-    
-
+print(move())
