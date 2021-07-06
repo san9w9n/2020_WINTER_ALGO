@@ -1,33 +1,35 @@
 import sys
-s=list(sys.stdin.readline().strip())
+input = sys.stdin.readline
 
-string=""
-arr=[]
-for i in range(len(s)):
-    if s[i]=='+':
-        arr.append(str(int(string)))
-        arr.append('+')
-        string=""  
-    elif s[i]=='-':
-        arr.append(str(int(string)))
-        arr.append('-')
-        string=""
-    else:
-        string+=s[i]
-arr.append(str(int(string)))
+line = input().strip()
+op = []
 
-sik=[]
-string=""
-for i in range(len(arr)):
-    if arr[i]=='-':
-        sik.append(eval(string))
-        string=""
-    else:
-        string+=arr[i]
-sik.append(eval(string))
+i=0
+string = ""
+while i<len(line):
+    try:
+        c = int(line[i])
+        string+=line[i]
+    except:
+        
+        if string: op.append(int(string))
+        string = ""
+        if line[i]=="-": op.append(line[i])
+    i+=1
+if string: op.append(int(string))
 
-sub=sik[0]
-for i in range(1,len(sik)):
-    sub-=sik[i]
+total = 0
+add = 0
 
-print(sub)
+for i in range(len(op)-1 , -1, -1):
+    if op[i]=="-":
+        total-=add
+        add=0
+    else: add+=op[i]
+if add>0: total+=add
+
+print(total)
+    
+    
+
+
