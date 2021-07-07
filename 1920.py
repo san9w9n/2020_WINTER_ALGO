@@ -1,17 +1,21 @@
 import sys
+input = sys.stdin.readline
 
-N=int(sys.stdin.readline())
-a=sorted(map(int,sys.stdin.readline().split()))
-M=int(sys.stdin.readline())
-f=list(map(int,sys.stdin.readline().split()))
+def binarySearch(l, r, val):
+    global arr
+    while l<=r:
+        mid = (l+r)//2
+        if arr[mid] == val: return True
+        elif arr[mid] < val: l = mid+1
+        else: r = mid-1
+    return False
 
-def bianry(comp,start,end):
-    if start>end: return 0
-    mid=(start+end)//2
-    if a[mid]==comp: return 1
-    elif a[mid]<comp:
-        return bianry(comp,mid+1,end)
-    else: return bianry(comp,start,mid-1)
+N = int(input())
+arr = list(map(int,input().split()))
+arr.sort()
+M = int(input())
+search = list(map(int,input().split()))
 
-for c in f:
-    print(bianry(c,0,N-1))
+for e in search:
+    if binarySearch(0,N-1,e): print(1)
+    else: print(0)
